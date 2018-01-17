@@ -1,0 +1,102 @@
+-  id: sunset_lights
+   alias: Sunset lights
+   initial_state: True
+   hide_entity: False
+   trigger:
+     platform: sun
+     event: sunset
+     offset: "-00:15:00"
+   action:
+     service: switch.turn_on
+     entity_id: group.porch_lights
+
+-  id: sunrise_lights
+   alias: Sunrise lights
+   initial_state: True
+   hide_entity: False
+   trigger:
+     platform: sun
+     event: sunrise
+     offset: "00:15:00"
+   action:
+     service: switch.turn_off
+     entity_id: group.porch_lights
+
+- id: first_light
+  alias: First Light
+  initial_state: True
+  hide_entity: False
+  trigger:
+    platform: time
+    at: '6:25'
+  action:
+    service: light.turn_on
+    entity_id: light.family_room_level
+    data:
+      brightness_pct: 100
+  
+-  id: morning_vent
+   alias: Morning vent
+   initial_state: True
+   hide_entity: False
+   trigger:
+     platform: time
+     at: '6:35'
+   action:
+     service: switch.turn_off
+     entity_id: switch.bedroom_vent_switch
+
+- id: early_evening_upstairs_lights
+  alias: Early Evening Upstairs Lights
+  initial_state: True
+  hide_entity: False
+  trigger:
+    platform: time
+    at: '17:30:00'
+  action:
+    service: scene.turn_on
+    entity_id: scene.early_evening_upstairs_lights
+
+- id: evening_back_porch
+  alias: Evening Back Porch
+  initial_state: True
+  hide_entity: False
+  trigger:
+    platform: time
+    at: '20:30:00'
+  action:
+    service: switch.turn_off
+    entity_id: switch.back_porch_switch
+
+#- id: living_room_tv_receiver_on
+#  alias: Living Room TV Receiver On
+#  initial_state: True
+#  hide_entity: False
+#  trigger:
+#    platform: state
+#    entity_id: media_player.samsung_tv_remote
+#    from: 'off'
+#    to: 'on'
+#  action:
+#    - service: media_player.turn_on
+#      entity_id: media_player.living_room_tv_audio
+
+- id: living_room_sonos
+  alias: Living Room Sonos
+  initial_state: True
+  hide_entity: False
+  trigger:
+    platform: state
+    entity_id: media_player.living_room
+    from: 'paused'
+    to: 'playing'
+  action:
+    - service: media_player.turn_on
+      entity_id: media_player.living_room_tv_audio
+    - service: media_player.select_source
+      data:
+        entity_id: media_player.living_room_tv_audio
+        source: "SONOS"
+
+#sonos
+#garage lights
