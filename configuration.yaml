@@ -1,0 +1,186 @@
+homeassistant:
+  # Name of the location where Home Assistant is running
+  name: Home
+  # Location required to calculate the time the sun rises and sets
+  latitude: !secret geo_lat
+  longitude: !secret geo_long
+  # Impacts weather/sunrise data (altitude above sea level in meters)
+  elevation: 168
+  # metric for Metric, imperial for Imperial
+  unit_system: imperial
+  # Pick yours from here: http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+  time_zone: America/Chicago
+ 
+  customize:
+    media_player.bedroom:
+      entity_picture: ''
+      friendly_name: Bedroom Sonos
+      order: 550
+    media_player.kitchen:
+      entity_picture: ''
+      friendly_name: Kitchen Sonos
+      order: 510
+    media_player.living_room:
+      entity_picture: ''
+      friendly_name: Living Room Sonos
+      order: 520
+    media_player.office:
+      entity_picture: ''
+      friendly_name: Office Sonos
+      order: 530
+    media_player.porch:
+      entity_picture: ''
+      friendly_name: Porch Sonos
+      order: 540
+    media_player.family_room_tv_audio:
+      order: 560
+    media_player.living_room_tv_audio:
+      order: 570
+    switch.kitchen_cabinets_switch:
+      friendly_name: Under-Cabinet
+    light.kitchen_cans_level:
+      friendly_name: Main Lights
+    light.kitchen_island_level:
+      friendly_name: Island
+    light.kitchen_sink_level:
+      friendly_name: Sink
+    light.family_room_level:
+      friendly_name: Family Room
+      icon: mdi:lamp
+    switch.back_porch_switch:
+      friendly_name: Back Porch
+    switch.front_porch_switch:
+      friendly_name: Front Porch
+    fan.porch_fan_level:
+      friendly_name: Porch Fan
+    binary_sensor.garage_door_sensor:
+      friendly_name: Garage Door
+      icon: mdi:glassdoor
+      sensor_class: opening
+    switch.garage_light_switch:
+      friendly_name: Garage Light
+    light.bedroom_lamp_level:
+      friendly_name: Bedroom
+      icon: mdi:lamp
+    switch.bedroom_vent_switch:
+      friendly_name: Bedroom Vent
+    group.upstairs:
+      order: 100
+    group.kitchen:
+      order: 200
+    group.climate:
+      order: 300
+    group.outside:
+      order: 400 
+    group.automations:
+      order: 500    
+
+climate:
+  - platform: zwave
+
+input_boolean:
+  goodnight:
+    name: Goodnight
+    initial: off
+    icon: mdi:bed
+
+# Enables the frontend
+frontend:
+
+# Enables configuration UI
+config:
+
+http:
+  # Uncomment this to add a password (recommended!)
+  api_password: !secret http_password
+  # Uncomment this if you are using SSL/TLS, running in Docker container, etc.
+  base_url: !secret http_url
+  #ssl_certificate: !secret http_ssl_certificate
+  #ssl_key: !secret http_ssl_key
+# Checks for available updates
+# Note: This component will send some information about your system to
+# the developers to assist with development of Home Assistant.
+# For more information, please see:
+# https://home-assistant.io/blog/2016/10/25/explaining-the-updater/
+updater:
+  # Optional, allows Home Assistant developers to focus on popular components.
+  # include_used_components: true
+
+# Discover some devices automatically
+discovery:
+
+# Allows you to issue voice commands from the frontend in enabled browsers
+conversation:
+
+# Enables support for tracking state changes over time
+history:
+
+# View all events in a logbook
+logbook:
+
+# Track the sun
+sun:
+
+# Weather prediction
+sensor:
+  - platform: yr
+
+# Text to speech
+tts:
+  - platform: google
+
+group: !include groups.yaml
+automation: !include automations.yaml
+
+zwave:
+  usb_path: /dev/ttyACM0
+  polling_interval: 30000
+  device_config:
+    light.family_room_level:
+      polling_intensity: 1
+      refresh_value: True
+      delay: 6
+    light.bedroom_lamp_level:
+      polling_intensity: 1
+      refresh_value: True
+      delay: 6
+    light.kitchen_cans_level:
+      polling_intensity: 1
+      refresh_value: True
+      delay: 6
+    light.kitchen_island_level:
+      polling_intensity: 1
+      refresh_value: True
+      delay: 6
+    light.kitchen_sink_level:
+      polling_intensity: 1
+      refresh_value: True
+      delay: 6
+
+#zoneminder:
+#  host: !secret zm_host
+#  ssl: True
+#  username: !secret zm_username
+#  password: !secret zm_password
+
+media_player:
+  - platform: denonavr
+    host: 192.168.1.89
+    name: Family Room TV Audio
+  - platform: denonavr
+    host: 192.168.1.163
+    name: Living Room TV Audio
+  - platform: samsungtv
+    host: 192.168.1.33
+
+ios:
+
+scene:
+  - name: Early Evening Upstairs Lights
+    entities:
+      light.family_room_level:
+        state: on
+        brightness_pct: 100
+      light.bedroom_lamp_level:
+        state: on
+        brightness_pct: 5
