@@ -46,6 +46,28 @@
      service: switch.turn_off
      entity_id: switch.bedroom_vent_switch
 
+- id: workday_lights_out
+  alias: Workday Lights Out
+  initial_state: True
+  hide_entity: False
+  trigger:
+    platform: time
+    at: '7:50'
+  action:
+    service: light.turn_off
+    entity_id: group.upstairs
+
+- id: early_evening_vent
+  alias: Early Evening Vent
+  initial_state: True
+  hide_entity: False
+  trigger:
+    platform: time
+    at: '17:00'
+  action:
+    service: switch.turn_on
+    entity_id: switch.bedroom_vent_switch
+
 - id: early_evening_upstairs_lights
   alias: Early Evening Upstairs Lights
   initial_state: True
@@ -80,6 +102,32 @@
 #  action:
 #    - service: media_player.turn_on
 #      entity_id: media_player.living_room_tv_audio
+
+- id: garage_lights_on
+  alias: Garage Lights On
+  initial_state: True
+  hide_entity: False
+  trigger:
+    platform: state
+    entity_id: binary_sensor.garage_door_sensor
+    from: 'off'
+    to: 'on'
+  action:
+    - service: switch.turn_on
+      entity_id: switch.garage_light_switch
+
+- id: garage_lights_off
+  alias: Garage Lights Off
+  initial_state: True
+  hide_entity: False
+  trigger:
+    platform: state
+    entity_id: binary_sensor.garage_door_sensor
+    from: 'on'
+    to: 'off'
+  action:
+    - service: switch.turn_off
+      entity_id: switch.garage_light_switch
 
 - id: living_room_sonos
   alias: Living Room Sonos
